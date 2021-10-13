@@ -1,0 +1,141 @@
+ mov bx,1000H
+mov ds,bx
+mov [0],al
+
+mov bx,1000H
+mov ds,bx
+mov [0],ax
+mov ax,[0]
+
+
+ax = 1123H
+bx = 6622H
+cx = 2211H
+
+
+
+
+mov ax,1000H        ax = 1000H
+mov ds,ax           ds = 1000H
+mov ax,11316        ax = 2C34H
+mov [0],ax          10000H = 34, 10001H = 2C
+mov bx,[0]          bx = 2C34H
+sub bx,[2]          bx = 1B12
+mov [2],bx          10002H = 12, 10003H = 1B
+
+2C34 - 1122 = 1B12
+
+00010
+ 0001
+-----
+00011
+
+
+2ECC + FD48 = 2C14
+
+mov ax,1      ax = 0001
+mov ds,ax     ds = ax = 0001
+mov ax,[0000] ax = 2662
+mov bx,[0001] bx = E626
+mov ax,bx     ax = E626
+mov ax,[0000] ax = 2662
+mov bx,[0002] bx = D6E6
+add ax,bx     ax = FD48
+add ax,[0004] ax = 2C14
+mov ax,0      ax = 0000
+mov al,[0002] ax = 00E6
+mov bx,0      bx = 0000
+mov bl,[000C] bx = 0026
+add al,bl     ax = 000C
+
+
+
+
+mov ax,2000H ax = 2000H
+mov ss,ax    ss = 2000H
+mov sp,0     sp = 0000H
+add sp,10    sp = 000AH
+pop ax       ax = 02B8H SP = 000C
+pop bx       bx = 3206H SP = 000E
+push ax      ax = 02B8H SP = 000C
+push bx      bx = 3206H SP = 000A
+pop ax       ax = 3206H SP = 000C
+pop bx       bx = 02B8H SP = 000E
+mov ax,4C00H ax = 4C00H
+
+
+
+
+
+
+mov ax,2000H   ax = 2000H
+mov ds,ax      ds = 2000H
+mov bx,1000H   bx = 1000H
+mov ax,[bx]    ax = 00BEH
+inc bx         bx = 1001H
+inc bx         bx = 1002H
+mov [bx],ax                        21002H      BE
+                                   21003H      00
+inc bx         bx = 1003H
+mov [bx],al                        21003H      BE
+inc bx         bx = 1004H
+mov [bx],al                        21004H      BE
+
+
+20000
+01000
+-----
+21000
+
+
+FFFF:0
+FFFF:B
+
+0:0200 -> 0020:0
+0:020B -> 0020:B
+
+
+00000
++0200
+-----
+00200
+
+
+FFFF:0
+FFFF:B
+
+0020:0
+0020:B
+
+
+
+0000:0200 -> 0020:0000
+0000:023F -> 0020:003F
+
+
+
+
+
+
+
+00200
+0023F
+
+0020:0000
+0020:003F
+
+0:200
+0:23F
+
+
+如何知道内存中一段机器指令的大小?
+
+正在学习 王爽 <<汇编语言 第三版>>，做到121页的实验，要求求出代码段在内存中的大小并复制到其他位置，我使用debug得出大小为17字节，但是有没有不用debug手动看得出的方法?
+
+第5章最后一个实验
+
+有没有不用debug工具可以求出一段指令的大小的方法?
+手动看
+
+
+
