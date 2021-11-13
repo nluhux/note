@@ -192,3 +192,56 @@ mov bx,[bx+2+di] bx=226AH
 1000 + 2 + 1
 
 
+
+
+
+思路:
+
+年份, 长度4, 一共21个, 21*4=84,一共占用84字节
+总收入, 长度4, 一共21个, 21*4=84,一共占用84字节
+雇员人数, 长度2, 一共21个, 21*2=42,一共占用42字节
+
+
+start:
+
+	mov ax,data
+	mov dx,table
+
+	mov si,0
+	mov di,0
+
+
+// 复制data里面的 年份4个byte 到table里面
+	mov cx,4
+	
+s:	mov ds,ax
+	mov bl,ds:[si]
+	mov ds,dx
+	mov ds:[di],bl
+	inc si
+	inc di
+
+	loop s
+
+	inc di // 跳过空格
+
+// 复制 收入总额
+	mov ax,data
+	mov dx,table
+	mov ds,ax
+	mov ax,ds:[si]
+	add si,2
+	mov ds,dx
+	mov dx,ds:[si]
+
+	mov bx,table
+	mov ds,bx
+	mov ds:[di],ax
+	add di,2
+	mov ds:[di],dx
+
+
+mov ax,4C00h
+
+
+5F
