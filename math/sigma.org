@@ -1,0 +1,11 @@
+
+
+#+BEGIN_SRC text
+    n=-1
+              i
+  sigma  D * 2
+	  i
+    i=-m
+#+END_SRC
+
+
