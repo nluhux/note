@@ -17,6 +17,10 @@ int push(int n);
 int pop(void);
 
 int main(int argc, char *argv[]) {
+	if (argc < 2) {
+		fprintf(stderr,"Usage: %s PATTERN\n",argv[0]);
+		exit(1);
+	}
 	char *pattern = argv[1];
 	char line[MAXLINE];
 
@@ -24,26 +28,6 @@ int main(int argc, char *argv[]) {
 		m_strindexall(line,pattern);
 		m_printf_posall(line);
 	}
-
-	
-//	test_m_strindexall();
-}
-
-void test_m_strindexall(void) {
-	char *pattern = "Hello";
-	char *line0 = "HelloWorldHelloWorldHelloWorldHelloWorldWOrldHelloAAA";
-	char *line1 = "HelloWorldHelloWorldHelloWorldHlloWorldWOrldHelloAAA";
-	char *line2 = "HelloWorldelloWorldHelloWorldHelloWorldWOrldHelloAAA";
-	char *line3 = "HelloWorldHelloWorldHlloWorldHelloWorldWOrldHelloAAA";
-
-	m_strindexall(line0,pattern);
-	m_printf_posall(line0);
-	m_strindexall(line1,pattern);
-	m_printf_posall(line1);
-	m_strindexall(line2,pattern);
-	m_printf_posall(line2);
-	m_strindexall(line3,pattern);
-	m_printf_posall(line3);
 }
 
 int m_getline(char line[],int lim) {
@@ -117,7 +101,7 @@ int pop(void) {
 		--sp;
 		return stack[sp];
 	} else {
-		printf("stack empty\n");
+		fprintf(stderr,"stack empty\n");
 		exit(1);
 	}
 }
