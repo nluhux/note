@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "getop.c"
+#include "getch.c"
+#include "stack.c"
 
 #define MAXOP 100
 #define NUMBER '0'

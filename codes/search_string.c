@@ -1,33 +1,49 @@
 #include <stdio.h>
-
-/* 无法正常工作 */
+#include <stdlib.h>
+#include <string.h>
 
 #define MAXLINE 1000
 
 int m_getline(char line[],int lim);
-int m_strindex(char source[],char searchfor[]);
-int recur_m_strindex(char source[],char searchfor[], int si);
-int recur_m_printf_pos(char line[]);
+int m_strindex(char source[],char searchfor[],int si);
+int m_strindexall(char source[],char searchfor[]);
+void m_printf_posall(char line[]);
+void test_m_strindexall(void);
 
-int stack[MAXLINE];
+int stack[MAXLINE]; // stack
+int sp = 0; // stack pointer
 
-void push(int n);
-int pop();
+int push(int n);
+int pop(void);
 
 int main(int argc, char *argv[]) {
 	char *pattern = argv[1];
 	char line[MAXLINE];
-	char stack[MAXLINE];
-	int instacknum = 0;
-	int found = 0;
-	int pos = 0;
 
 	while (m_getline(line,MAXLINE) > 0 ) {
-		recur_m_strindex(line,pattern,0);
-		recur_m_printf_pos(line);
+		m_strindexall(line,pattern);
+		m_printf_posall(line);
 	}
 
-	return found;
+	
+//	test_m_strindexall();
+}
+
+void test_m_strindexall(void) {
+	char *pattern = "Hello";
+	char *line0 = "HelloWorldHelloWorldHelloWorldHelloWorldWOrldHelloAAA";
+	char *line1 = "HelloWorldHelloWorldHelloWorldHlloWorldWOrldHelloAAA";
+	char *line2 = "HelloWorldelloWorldHelloWorldHelloWorldWOrldHelloAAA";
+	char *line3 = "HelloWorldHelloWorldHlloWorldHelloWorldWOrldHelloAAA";
+
+	m_strindexall(line0,pattern);
+	m_printf_posall(line0);
+	m_strindexall(line1,pattern);
+	m_printf_posall(line1);
+	m_strindexall(line2,pattern);
+	m_printf_posall(line2);
+	m_strindexall(line3,pattern);
+	m_printf_posall(line3);
 }
 
 int m_getline(char line[],int lim) {
@@ -44,14 +60,14 @@ int m_getline(char line[],int lim) {
 		line[i] = c;
 	}
 	if (c == '\n') {
-		i++;
 		line[i] = c;
+		i++;
 	}
 	line[i] = '\0';
 	return i;
 }
 
-int m_strindex(char s[], char t[], int si) {
+int m_strindex(char *s, char *t,int si) {
 	int i, j, k;
 
 	for (i=si; s[i] != '\0'; i++) {
@@ -65,36 +81,51 @@ int m_strindex(char s[], char t[], int si) {
 	return -1;
 }
 
-int recur_m_strindex(char s[], char t[],int si) {
+int m_strindexall(char *s, char *t) {
 	int ret = 0;
-	ret = m_strindex(s,t,si);
-	if (ret != -1) {
-		push(ret);
-		return (recur_m_strindex(s,t,ret));
+	int count = 0;
+	int i = 0;
+	for (;;) {
+		if (s[0] == '\0') {
+			break;
+		}
+		if ((ret = m_strindex(s,t,i)) == -1) {
+			break;
+		}
+		if (push(ret) == -1) {
+			break;
+		}
+		i = ret + strlen(t);
+		count++;
+	}
+	return count;
+}
+
+
+int push(int n) {
+	if (sp < MAXLINE) {
+		stack[sp] = n;
+		sp++;
 	} else {
 		return -1;
 	}
+	return 0;
 }
 
-
-void push(int n) {
-	int i;
-	for(i = 0;stack[i] != '\0';i++);
-	stack[i] = n;
-	i++;
-	stack[i] = '\0'
+int pop(void) {
+	if (sp > 0) {
+		--sp;
+		return stack[sp];
+	} else {
+		printf("stack empty\n");
+		exit(1);
+	}
 }
 
-int pop() {
-	int i;
-	int n;
-	for(i = 0;stack[i] != '\0';i++);
-	n = stack[i];
-	stack[i] = '\0';
-        return n;
-}
-
-int recur_m_printf_pos(char line[]) {
-	
-	printf
+void m_printf_posall(char line[]) {
+	while (sp > 0) {
+		printf("%d ",pop());
+	}
+	printf("\t | ");
+	printf("%s",line);
 }
