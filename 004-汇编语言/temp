@@ -194,17 +194,6 @@ mov bx,[bx+2+di] bx=226AH
 
 
 
-21 * 4
-
-
-
-
-
-start:	mov cx,21
-s:	push cx
-
-
-	mov si,0 ; 初始化table行指示符
 	mov di,0 ; 初始化data行指示符
 	mov bx,0 ; 初始化列指示符
 	
@@ -228,4 +217,17 @@ s0:	push cx
 	
 	pop cx
 
-	loop s
+	mov ds:[di],ax
+	add di,2
+	mov ds:[di],dx
+
+
+mov ax,4C00h
+
+
+5F
+
+
+
+mov ax,6 ax=6
+call ax  i

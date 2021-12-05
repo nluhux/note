@@ -1,0 +1,14 @@
+#include <stdio.h>
+
+int getint(int *pn) {
+	int c, sign;
+
+	while (isspace(c = getch())) {
+		;
+	}
+		
+}
+
+int main(void) {
+	
+}

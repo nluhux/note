@@ -1,0 +1,11 @@
+#include <stdio.h>
+
+int main(void) {
+	char *px = "hel";
+	printf("%d",*px);
+	px += 1;
+	printf("%d",*px);
+	px += 1;
+	printf("%d",*px);
+	return 0;
+}
