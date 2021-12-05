@@ -192,3 +192,40 @@ mov bx,[bx+2+di] bx=226AH
 1000 + 2 + 1
 
 
+
+
+21 * 4
+
+
+
+
+
+start:	mov cx,21
+s:	push cx
+
+
+	mov si,0 ; 初始化table行指示符
+	mov di,0 ; 初始化data行指示符
+	mov bx,0 ; 初始化列指示符
+	
+	mov cx,4 ; 复制年份
+s0:	push cx
+
+	mov ax,data
+	mov ds,ax
+	mov al,ds:[si+bx]
+	push ax
+	mov ax,table
+	mov ds,ax
+	pop ax
+	mov ds:[di+bx]
+	inc bx
+
+	pop cx
+	
+	loop s0
+
+	
+	pop cx
+
+	loop s
