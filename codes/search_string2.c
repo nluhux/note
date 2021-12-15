@@ -1,7 +1,9 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 
 #define BUFSIZE 4096
+#define ARRAY_LEN(array) (sizeof array / sizeof(array[0]))
 
 char stackbuf[BUFSIZE];
 int sp = 0;
@@ -11,6 +13,11 @@ int pop(int *number);
 int test_stack(void);
 int test_stack_full(void);
 int m_strindex(char *source, char *pattern, int si);
+int test_m_strindex(void);
+int m_strindex_all(char *line,char *pattern);
+int test_m_strindex_all(void);
+int m_cmp_int_array(int a[], int b[],int n);
+int test_m_cmp_int_array(void);
 
 int main(int argc, char *argv[]) {
 	if (argc < 2) {
@@ -26,11 +33,16 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	if (test_strindex() == -1) {
+	if (test_m_strindex() == -1) {
+		exit(1);
+	}
+
+	if (test_m_cmp_int_array() == -1) {
 		exit(1);
 	}
 
 	for (;;) {
+		m_getline(line,BUFSIZE);
 		m_strindex_all(line,pattern);
 		m_printf_stack();
 		m_printf_line();
@@ -184,37 +196,117 @@ int test_m_strindex(void) {
 	return 0;
 }
 
-
-
 int m_getline(char *line, int lim) {
 	int i;
-	for (i=0;i<lim;i++) {
+	int c;
+	for (i=0;i<lim;++i) {
+		c = getchar();
+		if (c == EOF ||
+		    c == '\n') {
+			break;
+		}
+		line[i] = c;
+	}
+	if (c == '\n') {
+		line[i] = c;
+		++i;
+	}
+	line[i] = '\0';
+	return i;
+}
+
+int m_strindex_all(char *s, char *p) {
+	int i;
+	int slen = strlen(s);
+	int ret;
+	for(i = 0;i<=slen;) {
+		ret = m_strindex(s,p,i);
+		if ( ret > 0 ) {
+			i = ret;
+			push(ret);
+		}
+		i = i + 1;
+	}
+	return 0;
+}
+
+int test_m_strindex_all(void) {
+	char *pattern = "Hello";
+	int ret;
+	
+	char *line1 = "HelloWorldHelloHello";
+	int line1posbuf[] = {0,10,15};
+	m_strindex_all(line1,pattern);
+	ret = m_cmp_int_array(stackbuf,line1posbuf,ARRAY_LEN(line1posbuf));
+
+	char *line2 = "HelloHelloHello";
+	int line2posbuf[] = {0,5,10};
+	m_strindex_all(line2,pattern);
+	ret = m_cmp_int_array(stackbuf,line2posbuf,ARRAY_LEN(line2posbuf));
+
+	char *line3 = "HelloEWWHelloHello";
+	int line3posbuf[] = {0,8,13};
+	m_strindex_all(line3,pattern);
+	ret = m_cmp_int_array(stackbuf,line3posbuf,ARRAY_LEN(line3posbuf));
+	
+}
+
+int m_cmp_int_array(int a[], int b[],int n) {
+	int i;
+	int alen = ARRAY_LEN(a);
+	int blen = ARRAY_LEN(b);
+	
+	if (blen > alen) {
+		return -1;
+	}
+	
+	for(i=0;i<n && i<alen && i<blen;++i) {
+		if (a[i] != b[i]) {
+			break;
+		}
+	}
+	if (i == n) {
+		return i;
+	}
+	return -1;
+}
+
+int test_m_cmp_int_array(void) {
+	int ret;
+	
+	int a_int_1[] = {0,1,2,3,4,5,6};
+	int b_int_1[] = {0,1};
+
+	ret = m_cmp_int_array(a_int_1,b_int_1,ARRAY_LEN(b_int_1));
+	if (ret != (ARRAY_LEN(b_int_1)-1)) {
+		fprintf("test m_cmp_int_array failed!\n");
+		return -1;
+	}
+
+	int a_int_2[] = {0,1,2,3,4};
+	int b_int_2[] = {0};
+
+	ret = m_cmp_int_array(a_int_2,b_int_2,ARRAY_LEN(b_int_2)-1);
+	if (ret != (ARRAY_LEN(b_int_2)-1) {
+		fprintf("test m_cmp_int_array failed!\n");
+		return -1;
+	}
+
+	int a_int_3[] = {0,1,2,3,4,5,6,7};
+	int b_int_3[] = {0,1,2,3,4,5,6,7};
+
+	ret = m_cmp_int_array(a_int_3,b_int_3,ARRAY_LEN(b_int_3)-1);
+	if (ret != (ARRAY_LEN(b_int_3)-1)) {
+		fprintf("test m_cmp_int_array failed!\n");
+		return -1;
+	}
+
+	int a_int_4[] = {0,1,2,3};
+	int b_int_4[] = {0,1,2,3,4,5};
+
+	ret = m_cmp_int_array(a_int_4,b_int_4,ARRAY_LEN(b_int_4)-1);
+	if (ret != -1) {
+		fprintf("test m_cmp_int_array failed!\n");
+		return -1;
 	}
 }
-
-
-
-
-/*
-main {
-  loop {
-  读入行
-  分析行
-  输出行
-  }
-}
-
-
-读入行 {
-  getline
-}
-
-分析行 {
-  loop {
-     i作为line下标传递给strindex
-     将line视为数组，逐个执行strindex  str[0] str[1]
-     返回值存储在ret变量
-     
-  }
-}
- */
